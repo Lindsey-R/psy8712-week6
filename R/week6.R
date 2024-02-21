@@ -17,4 +17,5 @@ mean(str_length(citations_txt))
 citations_tbl <- tibble(line = 1:length(citations_txt), cite = citations_txt) %>%
   mutate(cite = str_replace_all(cite, pattern = "[\'\"]", replacement = "")) %>%
   mutate(year = str_extract(cite, pattern = "\\d{4}")) %>%
-  mutate(page_start = str_extract(cite, pattern = "\\d+(?=-\\d+)"))
+  mutate(page_start = str_extract(cite, pattern = "\\d+(?=-\\d+)")) %>% #lookbehind and lookahead works with str_extract
+  mutate(perf_ref = str_detect(cite, ))
