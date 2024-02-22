@@ -12,10 +12,14 @@ length(citations) - length(citations_txt)
 mean(str_length(citations_txt))
 
 # Data Cleaning
-
+sample_n(citations_tbl,20)
 
 citations_tbl <- tibble(line = 1:length(citations_txt), cite = citations_txt) %>%
   mutate(cite = str_replace_all(cite, pattern = "[\'\"]", replacement = "")) %>%
   mutate(year = str_extract(cite, pattern = "\\d{4}")) %>%
   mutate(page_start = str_extract(cite, pattern = "\\d+(?=-\\d+)")) %>% #lookbehind and lookahead works with str_extract
-  mutate(perf_ref = str_detect(cite, ))
+  mutate(perf_ref = str_detect(cite, pattern = regex("performance", ignore_case = TRUE))) %>%
+  mutate(title = str_match(cite, pattern = "\\)\\.\\s([^\\.]+[.?!])")[,2]) %>%
+  mutate(first_author = str_match(cite, pattern = "\\b(\\w+,\\s[A-Z](?:\\.\\s*[A-Z])*\\.)")[,2])
+
+sum(!is.na(citations_tbl$first_author))
