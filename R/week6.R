@@ -12,7 +12,7 @@ length(citations) - length(citations_txt)
 mean(str_length(citations_txt))
 
 # Data Cleaning
-sample_n(citations_tbl,20)
+view(sample_n(citations_tbl,20))
 
 citations_tbl <- tibble(line = 1:length(citations_txt), cite = citations_txt) %>%
   mutate(cite = str_replace_all(cite, pattern = "[\'\"]", replacement = "")) %>%
