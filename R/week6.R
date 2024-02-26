@@ -12,13 +12,13 @@ length(citations) - length(citations_txt)
 mean(str_length(citations_txt))
 
 # Data Cleaning
-view(sample_n(citations_tbl,20))
+view(sample_n(citations_tbl,20)) # sample_n(citations_tbl, 20) %>% View()
 
 citations_tbl <- tibble(line = 1:length(citations_txt), cite = citations_txt) %>%
   mutate(cite = str_replace_all(cite, pattern = "[\'\"]", replacement = "")) %>%
-  mutate(year = str_extract(cite, pattern = "\\d{4}")) %>%
-  mutate(page_start = str_extract(cite, pattern = "\\d+(?=-\\d+)")) %>% #lookbehind and lookahead works with str_extract
-  mutate(perf_ref = str_detect(cite, pattern = regex("performance", ignore_case = TRUE))) %>%
+  mutate(year = as.integer(str_extract(cite, pattern = "\\d{4}"))) %>% #as.integer is not a verb 
+  mutate(page_start = as.integer(str_extract(cite, pattern = "\\d+(?=-\\d+)"))) %>% #lookbehind and lookahead works with str_extract
+  mutate(perf_ref = str_detect(cite, pattern = regex("performance", ignore_case = TRUE))) %>% #str_to_lower(cite), "performance"
   mutate(title = str_match(cite, pattern = "\\)\\.\\s([^\\.]+[.?!])")[,2]) %>%
   mutate(first_author = str_match(cite, pattern = "\\b(\\w+,\\s[A-Z](?:\\.\\s*[A-Z])*\\.)")[,2])
 
@@ -26,8 +26,9 @@ sum(!is.na(citations_tbl$first_author))
 
 
 #Any encoding that returns no errors should be fine; 
-#references can be find with tibble(str_enc_list()) %>% View
+#references can be find with 
+tibble(stri_enc_list()) %>% View
 tibble(stri_enc_list()) %>% 
-  filter(str_detect(`str_enc_list()`, "windows")) %>%
+  filter(stri_detect(`stri_enc_list()`, "windows")) %>%
   View()
 
