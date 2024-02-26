@@ -5,8 +5,8 @@ library(stringi)
 
 
 
-# Data Import
-citations <- stri_read_lines("../docs/citations.txt", encoding = 'Windows-1252')
+# Data Import 
+citations <- stri_read_lines("../docs/citations.txt", encoding = 'Windows-1252') 
 citations_txt <- citations[!stri_isempty(citations)]
 length(citations) - length(citations_txt)
 mean(str_length(citations_txt))
@@ -23,3 +23,11 @@ citations_tbl <- tibble(line = 1:length(citations_txt), cite = citations_txt) %>
   mutate(first_author = str_match(cite, pattern = "\\b(\\w+,\\s[A-Z](?:\\.\\s*[A-Z])*\\.)")[,2])
 
 sum(!is.na(citations_tbl$first_author))
+
+
+#Any encoding that returns no errors should be fine; 
+#references can be find with tibble(str_enc_list()) %>% View
+tibble(stri_enc_list()) %>% 
+  filter(str_detect(`str_enc_list()`, "windows")) %>%
+  View()
+
